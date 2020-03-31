@@ -1,0 +1,4 @@
+rootProject.name='BaseArch'
+include ':app'
+include ':domain'
+include ':data'
