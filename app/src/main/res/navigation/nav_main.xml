@@ -9,7 +9,11 @@
         android:id="@+id/splashView"
         android:name="com.jrebollo.basearch.ui.view.SplashView"
         android:label="SplashView"
-        tools:layout="@layout/view_splash" />
+        tools:layout="@layout/view_splash">
+        <action
+            android:id="@+id/fromSplashToHome"
+            app:destination="@id/homeView" />
+    </fragment>
     <fragment
         android:id="@+id/homeView"
         android:name="com.jrebollo.basearch.ui.view.HomeView"
