@@ -9,7 +9,7 @@ import kotlinx.coroutines.channels.ReceiveChannel
 import kotlinx.coroutines.channels.consumeEach
 import kotlin.coroutines.CoroutineContext
 
-abstract class UseCase<T> : CoroutineScope {
+abstract class UseCase<V : UseCase.RequestValues, T> : CoroutineScope {
     private val supervisorJob = SupervisorJob()
     private val mainDispatcher = Dispatchers.Main
     private val backgroundDispatcher = Dispatchers.Default
@@ -24,7 +24,7 @@ abstract class UseCase<T> : CoroutineScope {
 
     protected abstract suspend fun run(requestValues: RequestValues)
 
-    operator fun invoke(requestValues: RequestValues = sEmptyRequestValues, response: Response<T>) {
+    protected fun execute(requestValues: V, response: Response<T>) {
         launch {
             receiverChannel.consumeEach {
                 response.invoke(it)

@@ -1,5 +1,6 @@
 package com.jrebollo.domain
 
+import com.jrebollo.domain.controller.UserController
 import com.jrebollo.domain.helper.SharedPreferencesHelper
 import com.jrebollo.domain.usecase.CheckIfIsLoggedUseCase
 import com.jrebollo.domain.usecase.UseCase
@@ -28,4 +29,9 @@ abstract class DependencyInjector {
         useCase.tracker = provideTracker()
         return useCase
     }
+
+    //*********************
+    //**** CONTROLLER *****
+    //*********************
+    abstract fun provideUserController(): UserController
 }

@@ -54,8 +54,8 @@ class ServerClient(
             }
 
             requestBuilder.url(url).apply {
-                if (baseServerRequest.type == BaseServerRequest.Type.POST) {
-                    post(RequestBody.create(JSON, baseServerRequest.parseBody()))
+                if (baseServerRequest is RequestServerPost && baseServerRequest.type == BaseServerRequest.Type.POST) {
+                    post(RequestBody.create(JSON, baseServerRequest.buildBody().toString()))
                 }
             }
 
