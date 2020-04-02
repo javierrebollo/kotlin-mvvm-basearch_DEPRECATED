@@ -3,29 +3,34 @@ package com.jrebollo.basearch.ui.viewmodel
 import android.util.Log
 import com.jrebollo.basearch.ui.base.BaseViewModel
 import com.jrebollo.basearch.ui.base.BaseViewModelFactory
-import com.jrebollo.basearch.ui.view.SplashViewDirections
-import kotlinx.coroutines.*
+import com.jrebollo.domain.response.on
+import com.jrebollo.domain.usecase.CheckIfIsLoggedUseCase
 
-class SplashVM : BaseViewModel() {
+class SplashVM(
+    _checkIfIsLoggedUseCase: CheckIfIsLoggedUseCase
+) : BaseViewModel() {
+    val checkIfIsLoggedUseCase: CheckIfIsLoggedUseCase = _checkIfIsLoggedUseCase
+
     override fun start() {
-        Log.d(TAG, "Splash is started")
+        Log.d(TAG, "Splash is started - ${Thread.currentThread().name}")
 
-        GlobalScope.launch {
-            Log.d(TAG, "Start")
-            withContext(Dispatchers.Default) {
-                delay(2_000)
-            }
-
-            Log.d(TAG, "Finished")
-            withContext(Dispatchers.Main) {
-                goTo(SplashViewDirections.fromSplashToHome())
-            }
+        checkIfIsLoggedUseCase { taskResult ->
+            taskResult.on(
+                success = {
+                    println("Success - ${Thread.currentThread().name}")
+                },
+                failure = {
+                    println("Failure - ${Thread.currentThread().name}")
+                }
+            )
         }
     }
 }
 
-class SplashVMFactory : BaseViewModelFactory<SplashVM>() {
+class SplashVMFactory(
+    private val checkIfIsLoggedUseCase: CheckIfIsLoggedUseCase
+) : BaseViewModelFactory<SplashVM>() {
     override fun buildViewModel(): SplashVM {
-        return SplashVM()
+        return SplashVM(checkIfIsLoggedUseCase)
     }
 }
