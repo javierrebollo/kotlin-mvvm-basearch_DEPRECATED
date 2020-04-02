@@ -1,5 +1,6 @@
 package com.jrebollo.domain.usecase
 
+import com.jrebollo.domain.Tracker
 import com.jrebollo.domain.response.Response
 import com.jrebollo.domain.response.TaskResult
 import kotlinx.coroutines.*
@@ -14,6 +15,7 @@ abstract class UseCase<T> : CoroutineScope {
     private val backgroundDispatcher = Dispatchers.Default
     private var requestValues: RequestValues? = null
     protected val resultChannel = Channel<TaskResult<T>>()
+    var tracker: Tracker? = null
 
     private val receiverChannel: ReceiveChannel<TaskResult<T>> = resultChannel
 

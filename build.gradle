@@ -26,6 +26,8 @@ buildscript {
         versionName = '1.0'
         versionCode = 1
         coroutinesVersion = '1.3.5'
+        okhttpVersion = '3.14.2'
+        freeCompilerArgs = ["-XXLanguage:+InlineClasses"]
 
         //App
         lifecycleVersion = '2.2.0'

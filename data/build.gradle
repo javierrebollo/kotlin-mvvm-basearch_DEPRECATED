@@ -28,6 +28,7 @@ android {
     buildTypes {
         release {
             minifyEnabled false
+            buildConfigField "String", "BASE_URL", '"https://kotlin-mvvm-basearch-backend.herokuapp.com"'
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
@@ -42,6 +43,7 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation "androidx.appcompat:appcompat:$rootProject.appcompatVersion"
     implementation "androidx.core:core-ktx:$rootProject.ktxVersion"
+    implementation "com.squareup.okhttp3:okhttp:$rootProject.ext.okhttpVersion"
 
     testImplementation "junit:junit:$rootProject.junitVersion"
 

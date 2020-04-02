@@ -56,6 +56,7 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$rootProject.lifecycleVersion"
     implementation "androidx.navigation:navigation-fragment-ktx:$rootProject.navigationVersion"
     implementation "androidx.navigation:navigation-ui-ktx:$rootProject.navigationVersion"
+    implementation "com.squareup.okhttp3:okhttp:$rootProject.ext.okhttpVersion"
 
     testImplementation "junit:junit:$rootProject.junitVersion"
 
