@@ -29,7 +29,7 @@ class LoginVM(
     }
 
     fun login() {
-        loginUseCase.invoke(usernameLiveData.value ?: "", passwordLiveData.value ?: "") {
+        loginUseCase(usernameLiveData.value ?: "", passwordLiveData.value ?: "") {
             it.on(
                 success = { loginSuccess ->
                     if (loginSuccess) {
@@ -47,7 +47,7 @@ class LoginVM(
 }
 
 class LoginVMFactory(
-    val loginUseCase: LoginUseCase
+    private val loginUseCase: LoginUseCase
 ) : BaseViewModelFactory<LoginVM>() {
     override fun buildViewModel(): LoginVM {
         return LoginVM(loginUseCase)

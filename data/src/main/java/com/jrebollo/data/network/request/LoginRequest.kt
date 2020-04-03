@@ -1,6 +1,7 @@
 package com.jrebollo.data.network.request
 
 import com.jrebollo.data.network.RequestServerPost
+import com.jrebollo.data.network.parseToken
 import com.jrebollo.domain.Tracker
 import org.json.JSONObject
 
@@ -21,6 +22,6 @@ class LoginRequest(
     }
 
     override fun parse(response: String, tracker: Tracker): String {
-        return JSONObject(response).getString("token")
+        return JSONObject(response).parseToken()!!
     }
 }
