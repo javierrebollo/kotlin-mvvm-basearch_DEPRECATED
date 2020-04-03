@@ -1,23 +1,36 @@
 package com.jrebollo.domain.usecase
 
 import com.jrebollo.domain.controller.UserController
-import com.jrebollo.domain.response.SuccessResult
-import kotlinx.coroutines.delay
+import com.jrebollo.domain.response.Response
+import com.jrebollo.domain.response.on
 
 class LoginUseCase(
     private val userController: UserController
-) : UseCase<LoginUseCase.RequestValues, Boolean>() {
+) : UseCase<LoginUseCase.RequestValues, String>() {
 
     override suspend fun run(requestValues: RequestValues) {
         userController.login(
-
+            requestValues.userName,
+            requestValues.password
+        ).on(
+            success = {
+                sendSuccess(it)
+            },
+            failure = {
+                sendError(it)
+            }
         )
-        println("Thread - ${Thread.currentThread().name}")
-        delay(2_000)
-        resultChannel.send(SuccessResult(false))
     }
 
-    operator fun invoke()
+    operator fun invoke(userName: String, password: String, response: Response<String>) {
+        execute(
+            RequestValues(
+                userName,
+                password
+            ),
+            response
+        )
+    }
 
     class RequestValues(
         val userName: String,

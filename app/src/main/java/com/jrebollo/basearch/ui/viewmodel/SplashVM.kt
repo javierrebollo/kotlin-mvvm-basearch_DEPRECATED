@@ -5,11 +5,14 @@ import com.jrebollo.basearch.ui.base.BaseViewModel
 import com.jrebollo.basearch.ui.base.BaseViewModelFactory
 import com.jrebollo.domain.response.on
 import com.jrebollo.domain.usecase.CheckIfIsLoggedUseCase
+import com.jrebollo.domain.usecase.LoginUseCase
 
 class SplashVM(
-    _checkIfIsLoggedUseCase: CheckIfIsLoggedUseCase
+    _checkIfIsLoggedUseCase: CheckIfIsLoggedUseCase,
+    _loginUseCase: LoginUseCase
 ) : BaseViewModel() {
-    val checkIfIsLoggedUseCase: CheckIfIsLoggedUseCase = _checkIfIsLoggedUseCase
+    private val checkIfIsLoggedUseCase: CheckIfIsLoggedUseCase = _checkIfIsLoggedUseCase
+    private val loginUseCase: LoginUseCase = _loginUseCase
 
     override fun start() {
         Log.d(TAG, "Splash is started - ${Thread.currentThread().name}")
@@ -24,13 +27,25 @@ class SplashVM(
                 }
             )
         }
+
+        loginUseCase.invoke("fake", "fake") {
+            it.on(
+                success = { response ->
+                    println("Success: $response")
+                },
+                failure = { exception ->
+                    println("Exception: ${exception.message}")
+                }
+            )
+        }
     }
 }
 
 class SplashVMFactory(
-    private val checkIfIsLoggedUseCase: CheckIfIsLoggedUseCase
+    private val checkIfIsLoggedUseCase: CheckIfIsLoggedUseCase,
+    private val loginUseCase: LoginUseCase
 ) : BaseViewModelFactory<SplashVM>() {
     override fun buildViewModel(): SplashVM {
-        return SplashVM(checkIfIsLoggedUseCase)
+        return SplashVM(checkIfIsLoggedUseCase, loginUseCase)
     }
 }

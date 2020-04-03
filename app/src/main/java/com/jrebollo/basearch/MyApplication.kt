@@ -15,5 +15,6 @@ class MyApplication : Application() {
         super.onCreate()
 
         instance = this
+        tracker = TrackerImpl()
     }
 }
