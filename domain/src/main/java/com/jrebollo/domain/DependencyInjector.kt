@@ -12,7 +12,7 @@ abstract class DependencyInjector {
     //**** USE CASES ****
     //*******************
     protected fun provideCheckIfIsLoggedUseCase(): CheckIfIsLoggedUseCase {
-        return withTracker(CheckIfIsLoggedUseCase())
+        return withTracker(CheckIfIsLoggedUseCase(provideUserController()))
     }
 
     protected fun provideLoginUseCase(): LoginUseCase {
