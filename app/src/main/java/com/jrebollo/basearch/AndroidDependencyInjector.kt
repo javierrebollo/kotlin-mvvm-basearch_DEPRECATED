@@ -1,6 +1,7 @@
 package com.jrebollo.basearch
 
 import com.jrebollo.basearch.ui.viewmodel.HomeVMFactory
+import com.jrebollo.basearch.ui.viewmodel.LoginVMFactory
 import com.jrebollo.basearch.ui.viewmodel.SplashVMFactory
 import com.jrebollo.data.controller.UserControllerImpl
 import com.jrebollo.data.helper.NetworkStatusHelper
@@ -35,6 +36,10 @@ object AndroidDependencyInjector : DependencyInjector() {
 
     fun provideHomeVMFactory(): HomeVMFactory {
         return HomeVMFactory()
+    }
+
+    fun provideLoginVMFactory(): LoginVMFactory {
+        return LoginVMFactory()
     }
 
     //*****************
