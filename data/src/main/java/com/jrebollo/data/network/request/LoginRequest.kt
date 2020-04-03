@@ -15,7 +15,7 @@ class LoginRequest(
 
     override fun buildBody(): JSONObject {
         return JSONObject().apply {
-            put("name", userName)
+            put("user", userName)
             put("password", password)
         }
     }

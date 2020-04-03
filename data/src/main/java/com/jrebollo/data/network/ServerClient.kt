@@ -13,14 +13,10 @@ private const val TAG: String = "ServerClient"
 private val JSON = MediaType.parse("application/json; charset=utf-8")
 
 class ServerClient(
-    client: OkHttpClient,
-    networkStatusHelper: NetworkStatusHelper,
-    tracker: Tracker
+    private val client: OkHttpClient,
+    private val networkStatusHelper: NetworkStatusHelper,
+    private val tracker: Tracker
 ) {
-
-    private val mClient: OkHttpClient = client
-    private val mNetworkStatusHelper: NetworkStatusHelper = networkStatusHelper
-    private val mTracker: Tracker = tracker
 
     private val builder: Request.Builder
         get() = Request.Builder()//Add here your common heads
@@ -42,10 +38,10 @@ class ServerClient(
         extraHeaders: HashMap<String, String>? = null
     ): T {
 
-        if (mNetworkStatusHelper.isOnline) {
+        if (networkStatusHelper.isOnline) {
             val requestBuilder = builder
             val url = baseServerRequest.httpUrl
-            mTracker.logDebug(TAG, "Call to: ${url.uri()}")
+            tracker.logDebug(TAG, "Call to: ${url.uri()}")
 
             if (extraHeaders != null) {
                 for ((key, value) in extraHeaders) {
@@ -55,23 +51,25 @@ class ServerClient(
 
             requestBuilder.url(url).apply {
                 if (baseServerRequest is RequestServerPost && baseServerRequest.type == BaseServerRequest.Type.POST) {
-                    post(RequestBody.create(JSON, baseServerRequest.buildBody().toString()))
+                    val stringBody = baseServerRequest.buildBody().toString()
+                    tracker.logDebug(TAG, stringBody)
+                    post(RequestBody.create(JSON, stringBody))
                 }
             }
 
             var response: Response? = null
 
             try {
-                response = mClient.newCall(requestBuilder.build()).execute()
+                response = client.newCall(requestBuilder.build()).execute()
                 response.body()!!.use { responseBody ->
                     val responseString = responseBody.source().readUtf8()
-                    mTracker.logDebug(TAG, responseString)
+                    tracker.logDebug(TAG, responseString)
 
-                    return baseServerRequest.parse(responseString, mTracker)
+                    return baseServerRequest.parse(responseString, tracker)
                 }
 
             } catch (e: Exception) {
-                mTracker.logWarning(
+                tracker.logWarning(
                     Tracker.SERVER_REQUEST_ERROR, "Request onFailure " + e.localizedMessage, e, TAG
                 )
                 throw e

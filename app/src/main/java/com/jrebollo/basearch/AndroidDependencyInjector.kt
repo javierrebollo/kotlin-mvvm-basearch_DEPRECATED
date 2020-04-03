@@ -31,7 +31,7 @@ object AndroidDependencyInjector : DependencyInjector() {
     //**** VIEW MODELS *****
     //**********************
     fun provideSplashVMFactory(): SplashVMFactory {
-        return SplashVMFactory(provideCheckIfIsLoggedUseCase(), provideLoginUseCase())
+        return SplashVMFactory(provideCheckIfIsLoggedUseCase())
     }
 
     fun provideHomeVMFactory(): HomeVMFactory {
