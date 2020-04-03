@@ -12,12 +12,13 @@ import kotlinx.coroutines.selects.select
 import kotlin.coroutines.CoroutineContext
 
 abstract class UseCase<V : UseCase.RequestValues, T> : CoroutineScope {
+    val TAG: String = this.javaClass.simpleName
     private val supervisorJob = SupervisorJob()
     private val mainDispatcher = Dispatchers.Main
     private val backgroundDispatcher = Dispatchers.Default
     private var requestValues: RequestValues? = null
     protected val resultChannel = Channel<TaskResult<T>>()
-    var tracker: Tracker? = null
+    lateinit var tracker: Tracker
 
     private val receiverChannel: ReceiveChannel<TaskResult<T>> = resultChannel
 

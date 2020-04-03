@@ -4,9 +4,6 @@ import com.jrebollo.basearch.ui.base.BaseViewModel
 import com.jrebollo.basearch.ui.base.BaseViewModelFactory
 
 class HomeVM : BaseViewModel() {
-    override fun start() {
-
-    }
 }
 
 class HomeVMFactory : BaseViewModelFactory<HomeVM>() {

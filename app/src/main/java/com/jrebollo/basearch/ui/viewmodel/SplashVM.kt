@@ -15,7 +15,7 @@ class SplashVM(
     private val checkIfIsLoggedUseCase: CheckIfIsLoggedUseCase = _checkIfIsLoggedUseCase
     private val loginUseCase: LoginUseCase = _loginUseCase
 
-    override fun start() {
+    init {
         Log.d(TAG, "Splash is started - ${Thread.currentThread().name}")
 
         checkIfIsLoggedUseCase { taskResult ->

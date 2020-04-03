@@ -1,12 +1,13 @@
 package com.jrebollo.domain.usecase
 
 import com.jrebollo.domain.controller.UserController
+import com.jrebollo.domain.exception.safeLocalizedMessage
 import com.jrebollo.domain.response.Response
 import com.jrebollo.domain.response.on
 
 class LoginUseCase(
     private val userController: UserController
-) : UseCase<LoginUseCase.RequestValues, String>() {
+) : UseCase<LoginUseCase.RequestValues, Boolean>() {
 
     override suspend fun run(requestValues: RequestValues) {
         userController.login(
@@ -14,15 +15,17 @@ class LoginUseCase(
             requestValues.password
         ).on(
             success = {
-                sendSuccess(it)
+                userController.token = it
+                sendSuccess(true)
             },
             failure = {
+                tracker.logDebug(TAG, it.safeLocalizedMessage)
                 sendError(it)
             }
         )
     }
 
-    operator fun invoke(userName: String, password: String, response: Response<String>) {
+    operator fun invoke(userName: String, password: String, response: Response<Boolean>) {
         execute(
             RequestValues(
                 userName,

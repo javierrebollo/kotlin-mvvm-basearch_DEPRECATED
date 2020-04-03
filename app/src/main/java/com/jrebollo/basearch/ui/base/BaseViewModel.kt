@@ -12,7 +12,9 @@ abstract class BaseViewModel : ViewModel() {
     val navigation
         get() = _navigation
 
-    abstract fun start()
+    private val _errorNotifier: SingleLiveEvent<ErrorType> = SingleLiveEvent()
+    val errorNotifier
+        get() = _errorNotifier
 
     fun goTo(direction: NavDirections) {
         _navigation.value = NavigationCommand.To(direction)
@@ -25,6 +27,14 @@ abstract class BaseViewModel : ViewModel() {
     fun goBackTo(directionId: Int) {
         _navigation.value = NavigationCommand.BackTo(directionId)
     }
+
+    fun notifyError(error: ErrorType) {
+        _errorNotifier.value = error
+    }
+}
+
+sealed class ErrorType {
+    data class LoginError(val message: String) : ErrorType()
 }
 
 abstract class BaseViewModelFactory<VM : BaseViewModel> : ViewModelProvider.NewInstanceFactory() {

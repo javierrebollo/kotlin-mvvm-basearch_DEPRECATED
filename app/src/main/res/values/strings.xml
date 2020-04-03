@@ -3,4 +3,5 @@
     <string name="username">username</string>
     <string name="password">password</string>
     <string name="login">login</string>
+    <string name="invalid_username_or_password">Invalid username or password</string>
 </resources>

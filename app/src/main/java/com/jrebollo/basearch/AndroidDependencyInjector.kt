@@ -39,7 +39,7 @@ object AndroidDependencyInjector : DependencyInjector() {
     }
 
     fun provideLoginVMFactory(): LoginVMFactory {
-        return LoginVMFactory()
+        return LoginVMFactory(provideLoginUseCase())
     }
 
     //*****************
