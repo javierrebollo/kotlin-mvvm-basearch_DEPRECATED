@@ -7,7 +7,8 @@ import com.jrebollo.basearch.utils.NavigationCommand
 import com.jrebollo.basearch.utils.SingleLiveEvent
 
 abstract class BaseViewModel : ViewModel() {
-    val TAG: String = this.javaClass.simpleName
+    protected val TAG: String = this::class.java.simpleName
+
     private val _navigation: SingleLiveEvent<NavigationCommand> = SingleLiveEvent()
     val navigation
         get() = _navigation
@@ -35,6 +36,7 @@ abstract class BaseViewModel : ViewModel() {
 
 sealed class ErrorType {
     data class LoginError(val message: String) : ErrorType()
+    data class LoadLiveUserError(val message: String) : ErrorType()
 }
 
 abstract class BaseViewModelFactory<VM : BaseViewModel> : ViewModelProvider.NewInstanceFactory() {

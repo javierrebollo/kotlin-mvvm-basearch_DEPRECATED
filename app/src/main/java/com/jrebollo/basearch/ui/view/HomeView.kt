@@ -10,6 +10,7 @@ import com.jrebollo.basearch.ui.base.BaseView
 import com.jrebollo.basearch.ui.base.ErrorType
 import com.jrebollo.basearch.ui.viewmodel.HomeVM
 import com.jrebollo.basearch.ui.viewmodel.HomeVMFactory
+import com.jrebollo.data.helper.observe
 
 
 class HomeView : BaseView<ViewHomeBinding, HomeVM, HomeVMFactory>() {
@@ -31,7 +32,9 @@ class HomeView : BaseView<ViewHomeBinding, HomeVM, HomeVMFactory>() {
     }
 
     override fun addObservers(binding: ViewHomeBinding) {
-
+        viewModel.liveDataUsers?.observe(viewLifecycleOwner) {
+            println("Data changed")
+        }
     }
 
     override fun errorHandler(errorType: ErrorType) {

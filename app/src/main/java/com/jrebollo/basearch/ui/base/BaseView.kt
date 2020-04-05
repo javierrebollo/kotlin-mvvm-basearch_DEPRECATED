@@ -12,7 +12,8 @@ import androidx.navigation.fragment.findNavController
 import com.jrebollo.basearch.utils.NavigationCommand
 
 abstract class BaseView<DB : ViewDataBinding, VM : BaseViewModel, VMF : BaseViewModelFactory<VM>> : Fragment() {
-    val TAG: String = this.javaClass.simpleName
+    protected val TAG: String = this::class.java.simpleName
+
     protected lateinit var binding: DB
     abstract val viewModel: VM
     abstract fun buildViewModelFactory(): VMF

@@ -1,7 +1,13 @@
 package com.jrebollo.domain.entity
 
 data class User(
+    val id: String,
     val name: String,
-    val password: String?,
-    val token: String?
+    val lastName: String,
+    val email: String,
+    val gender: String,
+    val locationLatitude: Double?,
+    val locationLongitude: Double?,
+    val smallAvatar: String?,
+    val bigAvatar: String?
 ) : BaseEntity

@@ -9,7 +9,6 @@ import com.jrebollo.domain.response.TaskResult
 import okhttp3.*
 import java.util.*
 
-private const val TAG: String = "ServerClient"
 private val JSON = MediaType.parse("application/json; charset=utf-8")
 
 class ServerClient(
@@ -17,6 +16,7 @@ class ServerClient(
     private val networkStatusHelper: NetworkStatusHelper,
     private val tracker: Tracker
 ) {
+    private val TAG: String = this::class.java.simpleName
 
     private val builder: Request.Builder
         get() = Request.Builder()//Add here your common heads

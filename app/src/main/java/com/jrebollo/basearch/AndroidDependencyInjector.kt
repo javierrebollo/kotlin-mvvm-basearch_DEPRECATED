@@ -3,17 +3,23 @@ package com.jrebollo.basearch
 import com.jrebollo.basearch.ui.viewmodel.HomeVMFactory
 import com.jrebollo.basearch.ui.viewmodel.LoginVMFactory
 import com.jrebollo.basearch.ui.viewmodel.SplashVMFactory
-import com.jrebollo.data.controller.UserControllerImpl
+import com.jrebollo.data.db.AppDatabase
+import com.jrebollo.data.db.dao.UserDao
 import com.jrebollo.data.helper.NetworkStatusHelper
 import com.jrebollo.data.helper.SharedPreferencesHelperImpl
 import com.jrebollo.data.network.ServerClient
+import com.jrebollo.data.repository.UserRepositoryImpl
 import com.jrebollo.domain.DependencyInjector
 import com.jrebollo.domain.Tracker
-import com.jrebollo.domain.controller.UserController
+import com.jrebollo.domain.controller.UserRepository
 import com.jrebollo.domain.helper.SharedPreferencesHelper
 import okhttp3.OkHttpClient
 
 object AndroidDependencyInjector : DependencyInjector() {
+
+    private val applicationContext = MyApplication.instance.applicationContext
+    private val database
+        get() = AppDatabase.getInstance(applicationContext)
 
     private val okHttpClient: OkHttpClient by lazy {
         OkHttpClient.Builder().build()
@@ -35,7 +41,9 @@ object AndroidDependencyInjector : DependencyInjector() {
     }
 
     fun provideHomeVMFactory(): HomeVMFactory {
-        return HomeVMFactory()
+        return HomeVMFactory(
+            provideGetAllUsersUseCase()
+        )
     }
 
     fun provideLoginVMFactory(): LoginVMFactory {
@@ -47,7 +55,7 @@ object AndroidDependencyInjector : DependencyInjector() {
     //*****************
 
     override fun provideSharedPreferencesHelper(): SharedPreferencesHelper {
-        return SharedPreferencesHelperImpl(MyApplication.instance)
+        return SharedPreferencesHelperImpl(applicationContext)
     }
 
     override fun provideTracker(): Tracker {
@@ -55,17 +63,26 @@ object AndroidDependencyInjector : DependencyInjector() {
     }
 
     private fun provideNetworkStatusHelper(): NetworkStatusHelper {
-        return NetworkStatusHelper(MyApplication.instance)
+        return NetworkStatusHelper(applicationContext)
+    }
+
+
+    //**************
+    //**** DAO *****
+    //**************
+    private fun provideUserDao(): UserDao {
+        return database.userDao()
     }
 
     //*********************
-    //**** CONTROLLER *****
+    //**** REPOSITORY *****
     //*********************
 
-    override fun provideUserController(): UserController {
-        return UserControllerImpl(
+    override fun provideUserRepository(): UserRepository {
+        return UserRepositoryImpl.getInstance(
             provideSharedPreferencesHelper(),
-            serverClient
+            serverClient,
+            provideUserDao()
         )
     }
 }

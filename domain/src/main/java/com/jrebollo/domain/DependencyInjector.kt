@@ -1,8 +1,9 @@
 package com.jrebollo.domain
 
-import com.jrebollo.domain.controller.UserController
+import com.jrebollo.domain.controller.UserRepository
 import com.jrebollo.domain.helper.SharedPreferencesHelper
 import com.jrebollo.domain.usecase.CheckIfIsLoggedUseCase
+import com.jrebollo.domain.usecase.GetAllUsersUseCase
 import com.jrebollo.domain.usecase.LoginUseCase
 import com.jrebollo.domain.usecase.UseCase
 
@@ -12,11 +13,15 @@ abstract class DependencyInjector {
     //**** USE CASES ****
     //*******************
     protected fun provideCheckIfIsLoggedUseCase(): CheckIfIsLoggedUseCase {
-        return withTracker(CheckIfIsLoggedUseCase(provideUserController()))
+        return withTracker(CheckIfIsLoggedUseCase(provideUserRepository()))
     }
 
     protected fun provideLoginUseCase(): LoginUseCase {
-        return withTracker(LoginUseCase(provideUserController()))
+        return withTracker(LoginUseCase(provideUserRepository()))
+    }
+
+    protected fun provideGetAllUsersUseCase(): GetAllUsersUseCase {
+        return GetAllUsersUseCase(provideUserRepository())
     }
 
     //****************
@@ -36,7 +41,7 @@ abstract class DependencyInjector {
     }
 
     //*********************
-    //**** CONTROLLER *****
+    //**** REPOSITORY *****
     //*********************
-    abstract fun provideUserController(): UserController
+    abstract fun provideUserRepository(): UserRepository
 }

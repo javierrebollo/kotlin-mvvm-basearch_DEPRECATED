@@ -1,21 +1,21 @@
 package com.jrebollo.domain.usecase
 
-import com.jrebollo.domain.controller.UserController
+import com.jrebollo.domain.controller.UserRepository
 import com.jrebollo.domain.exception.safeLocalizedMessage
 import com.jrebollo.domain.response.Response
 import com.jrebollo.domain.response.on
 
 class LoginUseCase(
-    private val userController: UserController
+    private val userRepository: UserRepository
 ) : UseCase<LoginUseCase.RequestValues, Boolean>() {
 
     override suspend fun run(requestValues: RequestValues) {
-        userController.login(
+        userRepository.login(
             requestValues.userName,
             requestValues.password
         ).on(
             success = {
-                userController.token = it
+                userRepository.token = it
                 sendSuccess(true)
             },
             failure = {
