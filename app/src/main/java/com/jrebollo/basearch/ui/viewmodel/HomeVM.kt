@@ -9,8 +9,11 @@ import com.jrebollo.basearch.ui.base.BaseViewModelFactory
 class HomeVM(
     val userRepository: UserRepository
 ) : BaseViewModel() {
-
     var liveDataUsers: LiveData<List<User>>? = null
+
+    override fun loadData() {
+
+    }
 }
 
 class HomeVMFactory(

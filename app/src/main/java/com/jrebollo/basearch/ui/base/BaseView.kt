@@ -57,5 +57,7 @@ abstract class BaseView<DB : ViewDataBinding, VM : BaseViewModel, VMF : BaseView
                     TODO()
             }
         })
+
+        viewModel.loadData()
     }
 }

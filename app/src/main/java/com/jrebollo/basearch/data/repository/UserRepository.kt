@@ -34,6 +34,9 @@ class UserRepository private constructor(
             }
         }
 
+    val isLogged: Boolean
+        get() = !token.isNullOrEmpty()
+
 
     companion object {
 

@@ -1,6 +1,5 @@
 package com.jrebollo.basearch.ui.viewmodel
 
-import android.util.Log
 import com.jrebollo.basearch.data.repository.UserRepository
 import com.jrebollo.basearch.ui.base.BaseViewModel
 import com.jrebollo.basearch.ui.base.BaseViewModelFactory
@@ -10,10 +9,8 @@ class SplashVM(
     private val userRepository: UserRepository
 ) : BaseViewModel() {
 
-    init {
-        Log.d(TAG, "Splash is started - ${Thread.currentThread().name}")
-
-        if (true) {
+    override fun loadData() {
+        if (userRepository.isLogged) {
             goTo(SplashViewDirections.fromSplashToHome())
         } else {
             goTo(SplashViewDirections.fromSplashToLogin())
