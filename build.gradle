@@ -38,10 +38,12 @@ buildscript {
         freeCompilerArgs = ["-XXLanguage:+InlineClasses"]
         roomVersion = '2.2.5'
 
-                //Test
+        //Test
+        testCoreVersion = '2.1.0'
         junitVersion = '4.13'
         junitExtVersion = '1.1.1'
         espressoVersion = '3.2.0'
+        mockkVersion = '1.9.3'
 
     }
 }

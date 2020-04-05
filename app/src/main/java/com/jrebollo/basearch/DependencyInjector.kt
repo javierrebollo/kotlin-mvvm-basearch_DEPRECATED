@@ -73,7 +73,7 @@ object DependencyInjector {
     //**** REPOSITORY *****
     //*********************
 
-    private fun provideUserRepository(): UserRepository {
+    fun provideUserRepository(): UserRepository {
         return UserRepository.getInstance(
             provideSharedPreferencesHelper(),
             serverClient,

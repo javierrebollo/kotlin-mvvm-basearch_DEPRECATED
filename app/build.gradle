@@ -20,6 +20,8 @@ android {
         versionCode rootProject.versionCode
         versionName rootProject.versionName
 
+        vectorDrawables.useSupportLibrary true
+
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         kotlinOptions {
@@ -67,5 +69,7 @@ dependencies {
 
     androidTestImplementation "androidx.test.ext:junit:$rootProject.junitExtVersion"
     androidTestImplementation "androidx.test.espresso:espresso-core:$rootProject.espressoVersion"
+    androidTestImplementation "androidx.arch.core:core-testing:$rootProject.testCoreVersion"
+    androidTestImplementation "io.mockk:mockk-android:$rootProject.mockkVersion"
 
 }
