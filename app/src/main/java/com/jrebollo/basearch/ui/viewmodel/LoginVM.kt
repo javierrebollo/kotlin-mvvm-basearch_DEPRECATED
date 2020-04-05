@@ -2,17 +2,12 @@ package com.jrebollo.basearch.ui.viewmodel
 
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
-import com.jrebollo.basearch.R
+import com.jrebollo.basearch.data.repository.UserRepository
 import com.jrebollo.basearch.ui.base.BaseViewModel
 import com.jrebollo.basearch.ui.base.BaseViewModelFactory
-import com.jrebollo.basearch.ui.base.ErrorType
-import com.jrebollo.basearch.ui.view.LoginViewDirections
-import com.jrebollo.basearch.utils.extensions.getString
-import com.jrebollo.domain.response.on
-import com.jrebollo.domain.usecase.LoginUseCase
 
 class LoginVM(
-    private val loginUseCase: LoginUseCase
+    private val userRepository: UserRepository
 ) : BaseViewModel() {
     val usernameLiveData: MutableLiveData<String> = MutableLiveData()
     val passwordLiveData: MutableLiveData<String> = MutableLiveData()
@@ -29,27 +24,27 @@ class LoginVM(
     }
 
     fun login() {
-        loginUseCase(usernameLiveData.value ?: "", passwordLiveData.value ?: "") {
-            it.on(
-                success = { loginSuccess ->
-                    if (loginSuccess) {
-                        goTo(LoginViewDirections.fromLoginToHome())
-                    } else {
-                        notifyError(ErrorType.LoginError(R.string.invalid_username_or_password.getString()))
-                    }
-                },
-                failure = {
-                    notifyError(ErrorType.LoginError(R.string.invalid_username_or_password.getString()))
-                }
-            )
-        }
+//        loginUseCase(usernameLiveData.value ?: "", passwordLiveData.value ?: "") {
+//            it.on(
+//                success = { loginSuccess ->
+//                    if (loginSuccess) {
+//                        goTo(LoginViewDirections.fromLoginToHome())
+//                    } else {
+//                        notifyError(ErrorType.LoginError(R.string.invalid_username_or_password.getString()))
+//                    }
+//                },
+//                failure = {
+//                    notifyError(ErrorType.LoginError(R.string.invalid_username_or_password.getString()))
+//                }
+//            )
+//        }
     }
 }
 
 class LoginVMFactory(
-    private val loginUseCase: LoginUseCase
+    private val userRepository: UserRepository
 ) : BaseViewModelFactory<LoginVM>() {
     override fun buildViewModel(): LoginVM {
-        return LoginVM(loginUseCase)
+        return LoginVM(userRepository)
     }
 }

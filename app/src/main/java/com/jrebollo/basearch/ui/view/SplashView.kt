@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
-import com.jrebollo.basearch.AndroidDependencyInjector
+import com.jrebollo.basearch.DependencyInjector
 import com.jrebollo.basearch.databinding.ViewSplashBinding
 import com.jrebollo.basearch.ui.base.BaseView
 import com.jrebollo.basearch.ui.base.ErrorType
@@ -18,7 +18,7 @@ class SplashView : BaseView<ViewSplashBinding, SplashVM, SplashVMFactory>() {
     }
 
     override fun buildViewModelFactory(): SplashVMFactory {
-        return AndroidDependencyInjector.provideSplashVMFactory()
+        return DependencyInjector.provideSplashVMFactory()
     }
 
     override fun initComponents(binding: ViewSplashBinding) {

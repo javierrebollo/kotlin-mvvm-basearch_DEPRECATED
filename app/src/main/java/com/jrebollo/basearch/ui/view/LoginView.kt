@@ -7,7 +7,7 @@ import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
-import com.jrebollo.basearch.AndroidDependencyInjector
+import com.jrebollo.basearch.DependencyInjector
 import com.jrebollo.basearch.databinding.ViewLoginBinding
 import com.jrebollo.basearch.ui.base.BaseView
 import com.jrebollo.basearch.ui.base.ErrorType
@@ -20,7 +20,7 @@ class LoginView : BaseView<ViewLoginBinding, LoginVM, LoginVMFactory>() {
     }
 
     override fun buildViewModelFactory(): LoginVMFactory {
-        return AndroidDependencyInjector.provideLoginVMFactory()
+        return DependencyInjector.provideLoginVMFactory()
     }
 
     override fun addListeners(binding: ViewLoginBinding) {
