@@ -1,13 +1,16 @@
 package com.jrebollo.basearch.viewmodel
 
-import android.util.Log
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import com.jrebollo.basearch.DependencyInjector
+import com.jrebollo.basearch.R
 import com.jrebollo.basearch.data.network.ErrorResult
+import com.jrebollo.basearch.data.network.SuccessResult
 import com.jrebollo.basearch.data.repository.UserRepository
 import com.jrebollo.basearch.ui.base.ErrorType
 import com.jrebollo.basearch.ui.viewmodel.LoginVM
 import com.jrebollo.basearch.ui.viewmodel.LoginVMFactory
 import com.jrebollo.basearch.util.getValue
+import com.jrebollo.basearch.utils.NavigationCommand
 import io.mockk.every
 import io.mockk.spyk
 import org.junit.Assert.*
@@ -29,14 +32,13 @@ class LoginVMTest {
 
     @Before
     fun setUp() {
-        userRepository = spyk<UserRepository>()
+        userRepository = DependencyInjector.provideUserRepository()
         loginVM = LoginVMFactory(userRepository).buildViewModel()
     }
 
     @Test
     fun checkFieldValidations() {
         loginVM.loadData()
-        Log.e("LoginVMTest", "Value is: ${loginVM.enableLoginButton.value ?: false}")
 
         assertNull(getValue(loginVM.enableLoginButton))
 
@@ -56,13 +58,28 @@ class LoginVMTest {
     }
 
     @Test
-    fun checkLogin() {
+    fun checkLoginError() {
+        val spy = spyk(userRepository)
         every {
-            userRepository.login(any(), any())
+            spy.login(any(), any())
         } returns ErrorResult(Exception())
 
         loginVM.login()
         assertTrue(getValue(loginVM.errorNotifier) is ErrorType.LoginError)
+    }
 
+    @Test
+    fun checkLoginSuccess() {
+        val spyUserRepository = spyk(userRepository)
+        every {
+            spyUserRepository.login(any(), any())
+        } returns SuccessResult("")
+
+        loginVM.login()
+
+        val actionId = (getValue<NavigationCommand>(loginVM.navigation) as NavigationCommand.To)
+            .directions.actionId
+
+        assertEquals(R.id.fromLoginToHome, actionId)
     }
 }

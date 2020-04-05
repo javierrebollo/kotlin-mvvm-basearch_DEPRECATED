@@ -2,12 +2,9 @@ package com.jrebollo.basearch.ui.base
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavDirections
 import com.jrebollo.basearch.utils.NavigationCommand
 import com.jrebollo.basearch.utils.SingleLiveEvent
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 abstract class BaseViewModel : ViewModel() {
     protected val TAG: String = this::class.java.simpleName
@@ -33,9 +30,7 @@ abstract class BaseViewModel : ViewModel() {
     }
 
     fun notifyError(error: ErrorType) {
-        viewModelScope.launch(Dispatchers.Main) {
-            _errorNotifier.value = error
-        }
+        _errorNotifier.postValue(error)
     }
 
     abstract fun loadData()

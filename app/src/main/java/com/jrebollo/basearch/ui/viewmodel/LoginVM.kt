@@ -9,6 +9,7 @@ import com.jrebollo.basearch.data.repository.UserRepository
 import com.jrebollo.basearch.ui.base.BaseViewModel
 import com.jrebollo.basearch.ui.base.BaseViewModelFactory
 import com.jrebollo.basearch.ui.base.ErrorType
+import com.jrebollo.basearch.ui.view.LoginViewDirections
 import com.jrebollo.basearch.utils.extensions.getString
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -42,6 +43,7 @@ class LoginVM(
                     success = {
                         enableLoginButton.value = false
                         println("Success: Thread is - ${Thread.currentThread().name}")
+                        goTo(LoginViewDirections.fromLoginToHome())
                     },
                     failure = {
                         println("Failure: Thread is - ${Thread.currentThread().name}")
