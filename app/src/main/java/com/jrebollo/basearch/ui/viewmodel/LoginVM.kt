@@ -34,37 +34,19 @@ class LoginVM(
 
     fun login() {
         viewModelScope.launch(Dispatchers.IO) {
-            println("Launch: Thread is - ${Thread.currentThread().name}")
             val response = userRepository.login(usernameLiveData.value ?: "", passwordLiveData.value ?: "")
 
             withContext(Dispatchers.Default) {
-                println("withContext: Thread is - ${Thread.currentThread().name}")
                 response.on(
                     success = {
-                        println("Success: Thread is - ${Thread.currentThread().name}")
                         goTo(LoginViewDirections.fromLoginToHome())
                     },
                     failure = {
-                        println("Failure: Thread is - ${Thread.currentThread().name}")
                         notifyError(ErrorType.LoginError(R.string.error_invalid_username_or_password.getString()))
                     }
                 )
             }
         }
-//        loginUseCase(usernameLiveData.value ?: "", passwordLiveData.value ?: "") {
-//            it.on(
-//                success = { loginSuccess ->
-//                    if (loginSuccess) {
-//                        goTo(LoginViewDirections.fromLoginToHome())
-//                    } else {
-//                        notifyError(ErrorType.LoginError(R.string.invalid_username_or_password.getString()))
-//                    }
-//                },
-//                failure = {
-//                    notifyError(ErrorType.LoginError(R.string.invalid_username_or_password.getString()))
-//                }
-//            )
-//        }
     }
 }
 
