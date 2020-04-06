@@ -70,7 +70,7 @@ dependencies {
     androidTestImplementation "androidx.test.ext:junit:$rootProject.junitExtVersion"
     androidTestImplementation "androidx.test.espresso:espresso-core:$rootProject.espressoVersion"
     androidTestImplementation "androidx.arch.core:core-testing:$rootProject.testCoreVersion"
-    androidTestImplementation "io.mockk:mockk-android:1.9.3.kotlin12"
+    androidTestImplementation "io.mockk:mockk-android:$rootProject.mockkVersion"
 
 
 }

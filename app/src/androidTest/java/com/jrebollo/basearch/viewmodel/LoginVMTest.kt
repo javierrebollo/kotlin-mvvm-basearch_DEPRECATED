@@ -1,7 +1,6 @@
 package com.jrebollo.basearch.viewmodel
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.jrebollo.basearch.DependencyInjector
 import com.jrebollo.basearch.R
 import com.jrebollo.basearch.data.network.ErrorResult
 import com.jrebollo.basearch.data.network.SuccessResult
@@ -12,7 +11,7 @@ import com.jrebollo.basearch.ui.viewmodel.LoginVMFactory
 import com.jrebollo.basearch.util.getValue
 import com.jrebollo.basearch.utils.NavigationCommand
 import io.mockk.every
-import io.mockk.spyk
+import io.mockk.mockk
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Rule
@@ -32,7 +31,7 @@ class LoginVMTest {
 
     @Before
     fun setUp() {
-        userRepository = DependencyInjector.provideUserRepository()
+        userRepository = mockk<UserRepository>()
         loginVM = LoginVMFactory(userRepository).buildViewModel()
     }
 
@@ -59,9 +58,8 @@ class LoginVMTest {
 
     @Test
     fun checkLoginError() {
-        val spy = spyk(userRepository)
         every {
-            spy.login(any(), any())
+            userRepository.login(any(), any())
         } returns ErrorResult(Exception())
 
         loginVM.login()
@@ -70,9 +68,8 @@ class LoginVMTest {
 
     @Test
     fun checkLoginSuccess() {
-        val spyUserRepository = spyk(userRepository)
         every {
-            spyUserRepository.login(any(), any())
+            userRepository.login(any(), any())
         } returns SuccessResult("")
 
         loginVM.login()

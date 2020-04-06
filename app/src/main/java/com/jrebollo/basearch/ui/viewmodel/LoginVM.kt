@@ -41,7 +41,6 @@ class LoginVM(
                 println("withContext: Thread is - ${Thread.currentThread().name}")
                 response.on(
                     success = {
-                        enableLoginButton.value = false
                         println("Success: Thread is - ${Thread.currentThread().name}")
                         goTo(LoginViewDirections.fromLoginToHome())
                     },
