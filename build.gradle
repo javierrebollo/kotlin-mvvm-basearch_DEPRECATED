@@ -38,9 +38,12 @@ buildscript {
         freeCompilerArgs = ["-XXLanguage:+InlineClasses"]
         roomVersion = '2.2.5'
 
-                //Test
+        //Test
         junitVersion = '4.13'
         junitExtVersion = '1.1.1'
+        androidXCoreTestingVersion = '2.1.0'
+        mockitoCoreVersion = '3.3.0'
+        mockitoKotlinVersion = '2.1.0'
         espressoVersion = '3.2.0'
 
     }

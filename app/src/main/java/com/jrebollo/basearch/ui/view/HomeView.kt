@@ -1,7 +1,6 @@
 package com.jrebollo.basearch.ui.view
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
@@ -43,9 +42,6 @@ class HomeView : BaseView<ViewHomeBinding, HomeVM, HomeVMFactory>() {
 
     override fun addObservers(binding: ViewHomeBinding) {
         viewModel.liveDataUsers?.observe(viewLifecycleOwner) {
-            println("Data changed")
-            println("Thread: ${Thread.currentThread().name}")
-            Log.d(TAG, "Users: $it")
             (binding.rvUserList.adapter as UserListAdapter).updateItems(it)
         }
     }
