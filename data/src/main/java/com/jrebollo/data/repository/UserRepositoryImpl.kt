@@ -1,7 +1,9 @@
 package com.jrebollo.data.repository
 
+import android.util.Log
 import androidx.lifecycle.Transformations
 import com.jrebollo.data.db.dao.UserDao
+import com.jrebollo.data.db.entity.UserRoom
 import com.jrebollo.data.helper.LiveDataHandlerImpl
 import com.jrebollo.data.network.ServerClient
 import com.jrebollo.data.network.request.LoginRequest
@@ -9,6 +11,7 @@ import com.jrebollo.domain.controller.UserRepository
 import com.jrebollo.domain.entity.User
 import com.jrebollo.domain.helper.LiveDataHandler
 import com.jrebollo.domain.helper.SharedPreferencesHelper
+import com.jrebollo.domain.response.SuccessResult
 import com.jrebollo.domain.response.TaskResult
 
 class UserRepositoryImpl private constructor(
@@ -16,6 +19,7 @@ class UserRepositoryImpl private constructor(
     private val serverClient: ServerClient,
     private val userDao: UserDao
 ) : UserRepository {
+    private val TAG: String = this::class.java.simpleName
 
     override var token: String?
         get() = sharedPreferencesHelper.token
@@ -37,6 +41,11 @@ class UserRepositoryImpl private constructor(
         }
     )
 
+    override suspend fun addUser(user: User): TaskResult<Boolean> {
+        val returned = userDao.insert(UserRoom.from(user))
+        Log.d(TAG, "Returned value $returned")
+        return SuccessResult(true)
+    }
 
     companion object {
 

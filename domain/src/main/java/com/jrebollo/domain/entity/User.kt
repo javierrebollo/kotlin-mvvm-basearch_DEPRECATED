@@ -6,8 +6,8 @@ data class User(
     val lastName: String,
     val email: String,
     val gender: String,
-    val locationLatitude: Double?,
-    val locationLongitude: Double?,
-    val smallAvatar: String?,
-    val bigAvatar: String?
+    val locationLatitude: Double? = null,
+    val locationLongitude: Double? = null,
+    val smallAvatar: String? = null,
+    val bigAvatar: String? = null
 ) : BaseEntity

@@ -5,6 +5,7 @@ import com.jrebollo.basearch.ui.viewmodel.LoginVMFactory
 import com.jrebollo.basearch.ui.viewmodel.SplashVMFactory
 import com.jrebollo.data.db.AppDatabase
 import com.jrebollo.data.db.dao.UserDao
+import com.jrebollo.data.helper.LiveDataHandlerDispatcherImpl
 import com.jrebollo.data.helper.NetworkStatusHelper
 import com.jrebollo.data.helper.SharedPreferencesHelperImpl
 import com.jrebollo.data.network.ServerClient
@@ -12,6 +13,7 @@ import com.jrebollo.data.repository.UserRepositoryImpl
 import com.jrebollo.domain.DependencyInjector
 import com.jrebollo.domain.Tracker
 import com.jrebollo.domain.controller.UserRepository
+import com.jrebollo.domain.helper.LiveDataHandlerDispatcher
 import com.jrebollo.domain.helper.SharedPreferencesHelper
 import okhttp3.OkHttpClient
 
@@ -42,7 +44,8 @@ object AndroidDependencyInjector : DependencyInjector() {
 
     fun provideHomeVMFactory(): HomeVMFactory {
         return HomeVMFactory(
-            provideGetAllUsersUseCase()
+            provideGetAllUsersLDUseCase(),
+            provideRefreshUsersUseCase()
         )
     }
 
@@ -66,6 +69,9 @@ object AndroidDependencyInjector : DependencyInjector() {
         return NetworkStatusHelper(applicationContext)
     }
 
+    override fun provideLiveDataHandlerDispatcher(): LiveDataHandlerDispatcher {
+        return LiveDataHandlerDispatcherImpl()
+    }
 
     //**************
     //**** DAO *****

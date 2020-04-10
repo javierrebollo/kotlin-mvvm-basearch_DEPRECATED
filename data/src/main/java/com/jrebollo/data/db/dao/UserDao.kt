@@ -13,5 +13,8 @@ interface UserDao {
     fun getAllUsers(): LiveData<List<UserRoom>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertAll(plants: List<UserRoom>)
+    suspend fun insertAll(userList: List<UserRoom>)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insert(user: UserRoom): Long
 }

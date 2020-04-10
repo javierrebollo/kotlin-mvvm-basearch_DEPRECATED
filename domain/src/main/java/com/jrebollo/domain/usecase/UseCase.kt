@@ -13,10 +13,10 @@ import kotlin.coroutines.CoroutineContext
 
 abstract class UseCase<V : UseCase.RequestValues, T> : CoroutineScope {
     protected val TAG: String = this::class.java.simpleName
-
     private val supervisorJob = SupervisorJob()
     private val mainDispatcher = Dispatchers.Main
     private val backgroundDispatcher = Dispatchers.Default
+    private val ioDispatcher = Dispatchers.Default
     private var requestValues: RequestValues? = null
     protected val resultChannel = Channel<TaskResult<T>>()
     lateinit var tracker: Tracker
@@ -49,6 +49,10 @@ abstract class UseCase<V : UseCase.RequestValues, T> : CoroutineScope {
     }
 
     protected fun <T> startAsync(block: suspend () -> T): Deferred<T> = async(supervisorJob) {
+        block()
+    }
+
+    protected suspend fun <T> runIOBlock(block: suspend () -> T) = withContext(ioDispatcher) {
         block()
     }
 

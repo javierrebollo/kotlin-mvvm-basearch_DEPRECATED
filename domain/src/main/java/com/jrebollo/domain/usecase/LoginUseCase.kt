@@ -10,19 +10,21 @@ class LoginUseCase(
 ) : UseCase<LoginUseCase.RequestValues, Boolean>() {
 
     override suspend fun run(requestValues: RequestValues) {
-        userRepository.login(
-            requestValues.userName,
-            requestValues.password
-        ).on(
-            success = {
-                userRepository.token = it
-                sendSuccess(true)
-            },
-            failure = {
-                tracker.logDebug(TAG, it.safeLocalizedMessage)
-                sendError(it)
-            }
-        )
+        runIOBlock {
+            userRepository.login(
+                requestValues.userName,
+                requestValues.password
+            ).on(
+                success = {
+                    userRepository.token = it
+                    sendSuccess(true)
+                },
+                failure = {
+                    tracker.logDebug(TAG, it.safeLocalizedMessage)
+                    sendError(it)
+                }
+            )
+        }
     }
 
     operator fun invoke(userName: String, password: String, response: Response<Boolean>) {

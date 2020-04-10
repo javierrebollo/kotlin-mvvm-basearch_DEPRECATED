@@ -1,11 +1,9 @@
 package com.jrebollo.domain
 
 import com.jrebollo.domain.controller.UserRepository
+import com.jrebollo.domain.helper.LiveDataHandlerDispatcher
 import com.jrebollo.domain.helper.SharedPreferencesHelper
-import com.jrebollo.domain.usecase.CheckIfIsLoggedUseCase
-import com.jrebollo.domain.usecase.GetAllUsersUseCase
-import com.jrebollo.domain.usecase.LoginUseCase
-import com.jrebollo.domain.usecase.UseCase
+import com.jrebollo.domain.usecase.*
 
 abstract class DependencyInjector {
 
@@ -13,15 +11,23 @@ abstract class DependencyInjector {
     //**** USE CASES ****
     //*******************
     protected fun provideCheckIfIsLoggedUseCase(): CheckIfIsLoggedUseCase {
-        return withTracker(CheckIfIsLoggedUseCase(provideUserRepository()))
+        return complete(CheckIfIsLoggedUseCase(provideUserRepository()))
     }
 
     protected fun provideLoginUseCase(): LoginUseCase {
-        return withTracker(LoginUseCase(provideUserRepository()))
+        return complete(LoginUseCase(provideUserRepository()))
     }
 
-    protected fun provideGetAllUsersUseCase(): GetAllUsersUseCase {
-        return GetAllUsersUseCase(provideUserRepository())
+    protected fun provideRefreshUsersUseCase(): RefreshUsersUseCase {
+        return complete(RefreshUsersUseCase(provideUserRepository()))
+    }
+
+    //*****************************
+    //**** LIVE DATA USE CASES ****
+    //*****************************
+
+    protected fun provideGetAllUsersLDUseCase(): GetAllUsersLDUseCase {
+        return GetAllUsersLDUseCase(provideUserRepository())
     }
 
     //****************
@@ -29,13 +35,14 @@ abstract class DependencyInjector {
     //****************
     abstract fun provideSharedPreferencesHelper(): SharedPreferencesHelper
     abstract fun provideTracker(): Tracker
+    abstract fun provideLiveDataHandlerDispatcher(): LiveDataHandlerDispatcher
 
 
     //**********************
     //**** SYNTAX SUGAR ****
     //**********************
 
-    private fun <U : UseCase<*, *>> withTracker(useCase: U): U {
+    private fun <U : UseCase<*, *>> complete(useCase: U): U {
         useCase.tracker = provideTracker()
         return useCase
     }
