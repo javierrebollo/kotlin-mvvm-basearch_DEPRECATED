@@ -3,17 +3,16 @@ package com.jrebollo.basearch.usecases
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.jrebollo.basearch.CoroutineTestRule
 import com.jrebollo.domain.controller.UserRepository
-import com.jrebollo.domain.response.SuccessResult
-import com.jrebollo.domain.response.on
+import com.jrebollo.domain.response.Response
 import com.jrebollo.domain.usecase.LoginUseCase
-import com.nhaarman.mockitokotlin2.any
-import org.junit.Assert
+import io.mockk.every
+import io.mockk.slot
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.mockito.ArgumentMatchers
+import org.mockito.ArgumentCaptor
+import org.mockito.Captor
 import org.mockito.Mock
-import org.mockito.Mockito
 import org.mockito.MockitoAnnotations
 
 
@@ -23,6 +22,10 @@ class LoginUseCaseTest {
 
     @Mock
     private lateinit var userRepository: UserRepository
+
+    @Captor
+    private lateinit var responseCaptor: ArgumentCaptor<Response<Boolean>>
+
 
     @get:Rule
     val rule = InstantTaskExecutorRule()
@@ -39,19 +42,16 @@ class LoginUseCaseTest {
     @Test
     fun loginCorrectTest() {
         var token = "Fake_token"
-        Mockito.`when`(userRepository.login(any(), any())).thenAnswer {
-            return@thenAnswer SuccessResult(token)
+        val response = slot<Response<Boolean>>()
+
+        every {
+            loginUseCase.invoke(any(), any()) {
+                capture(response)
+            }
+        } answers {
+            value
         }
-        loginUseCase(ArgumentMatchers.anyString(), ArgumentMatchers.anyString()) {
-            it.on(
-                success = { result ->
-                    Assert.assertTrue(false)
-                    Assert.assertEquals(userRepository.token, "pepito")
-                },
-                failure = {
-                    assert(false)
-                }
-            )
-        }
+
+        response.captured
     }
 }
