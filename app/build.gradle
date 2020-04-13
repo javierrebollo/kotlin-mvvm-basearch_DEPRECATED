@@ -67,6 +67,12 @@ dependencies {
     kapt "androidx.room:room-compiler:$rootProject.roomVersion"
 
     testImplementation "junit:junit:$rootProject.junitVersion"
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$rootProject.coroutinesVersion"
+    testImplementation "androidx.test.espresso:espresso-core:$rootProject.espressoVersion"
+    testImplementation "androidx.arch.core:core-testing:$rootProject.testCoreVersion"
+    testImplementation "io.mockk:mockk:$rootProject.mockkVersion"
+
+
 
     androidTestImplementation "androidx.test.ext:junit:$rootProject.junitExtVersion"
     androidTestImplementation "androidx.test.espresso:espresso-core:$rootProject.espressoVersion"

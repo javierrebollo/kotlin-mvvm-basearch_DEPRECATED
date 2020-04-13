@@ -46,12 +46,13 @@ class UserRepository private constructor(
         }
     }
 
-    val liveUsers: LiveData<List<User>> =
-        Transformations.map(userDao.getAllUsers()) {
-            it.map { userRoom ->
-                userRoom.toUser()
+    val liveUsers: LiveData<List<User>>
+        get() =
+            Transformations.map(userDao.getAllUsers()) {
+                it.map { userRoom ->
+                    userRoom.toUser()
+                }
             }
-        }
 
     val isLogged: Boolean
         get() = !token.isNullOrEmpty()
