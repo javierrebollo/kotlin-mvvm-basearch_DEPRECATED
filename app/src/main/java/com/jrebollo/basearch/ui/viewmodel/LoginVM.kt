@@ -1,19 +1,18 @@
 package com.jrebollo.basearch.ui.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.jrebollo.basearch.R
-import com.jrebollo.basearch.data.network.on
 import com.jrebollo.basearch.data.repository.UserRepository
 import com.jrebollo.basearch.ui.base.BaseViewModel
 import com.jrebollo.basearch.ui.base.BaseViewModelFactory
 import com.jrebollo.basearch.ui.base.ErrorType
 import com.jrebollo.basearch.ui.view.LoginViewDirections
 import com.jrebollo.basearch.utils.extensions.getString
-import kotlinx.coroutines.Dispatchers
+import com.jrebollo.basearch.utils.extensions.on
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class LoginVM(
     private val userRepository: UserRepository
@@ -33,19 +32,22 @@ class LoginVM(
     }
 
     fun login() {
-        viewModelScope.launch(Dispatchers.IO) {
-            val response = userRepository.login(usernameLiveData.value ?: "", passwordLiveData.value ?: "")
-
-            withContext(Dispatchers.Default) {
-                response.on(
+        viewModelScope.launch {
+            userRepository.login(usernameLiveData.value ?: "", passwordLiveData.value ?: "")
+                .on(
+                    loading = {
+                        Log.d(TAG, "Loading...")
+                        showLoading()
+                    },
                     success = {
+                        hideLoading()
                         goTo(LoginViewDirections.fromLoginToHome())
                     },
                     failure = {
+                        hideLoading()
                         notifyError(ErrorType.LoginError(R.string.error_invalid_username_or_password.getString()))
                     }
                 )
-            }
         }
     }
 }

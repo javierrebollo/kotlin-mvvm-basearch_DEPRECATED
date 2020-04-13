@@ -9,11 +9,13 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
+import com.jrebollo.basearch.ui.view.dialog.LoadingDialog
 import com.jrebollo.basearch.utils.NavigationCommand
 
 abstract class BaseView<DB : ViewDataBinding, VM : BaseViewModel, VMF : BaseViewModelFactory<VM>> : Fragment() {
     protected val TAG: String = this::class.java.simpleName
 
+    private val loadingDialog: LoadingDialog = LoadingDialog()
     protected lateinit var binding: DB
     abstract val viewModel: VM
     abstract fun buildViewModelFactory(): VMF
@@ -38,6 +40,13 @@ abstract class BaseView<DB : ViewDataBinding, VM : BaseViewModel, VMF : BaseView
         addListeners(binding)
         addObservers(binding)
         viewModel.errorNotifier.observe(viewLifecycleOwner, this::errorHandler)
+        viewModel.loadingState.observe(viewLifecycleOwner) {
+            if (it) {
+                loadingDialog.show(parentFragmentManager, TAG)
+            } else {
+                loadingDialog.dismiss()
+            }
+        }
         return binding.root
     }
 

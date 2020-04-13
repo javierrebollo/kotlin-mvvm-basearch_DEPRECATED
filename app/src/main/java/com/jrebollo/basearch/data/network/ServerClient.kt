@@ -23,9 +23,9 @@ class ServerClient(
     ): TaskResult<T> {
 
         return try {
-            SuccessResult(executeWithExceptions(baseServerRequest, extraHeaders))
+            TaskResult.SuccessResult(executeWithExceptions(baseServerRequest, extraHeaders))
         } catch (exception: Exception) {
-            ErrorResult(exception)
+            TaskResult.ErrorResult(exception)
         }
     }
 

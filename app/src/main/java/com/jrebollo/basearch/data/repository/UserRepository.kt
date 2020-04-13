@@ -7,7 +7,14 @@ import com.jrebollo.basearch.data.entity.User
 import com.jrebollo.basearch.data.helper.SharedPreferencesHelper
 import com.jrebollo.basearch.data.network.ServerClient
 import com.jrebollo.basearch.data.network.TaskResult
+import com.jrebollo.basearch.data.network.on
 import com.jrebollo.basearch.data.network.request.LoginRequest
+import com.jrebollo.basearch.utils.extensions.failure
+import com.jrebollo.basearch.utils.extensions.success
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.channelFlow
+import kotlinx.coroutines.withContext
 
 class UserRepository private constructor(
     private val sharedPreferencesHelper: SharedPreferencesHelper,
@@ -21,10 +28,22 @@ class UserRepository private constructor(
             sharedPreferencesHelper.token = value
         }
 
-    fun login(username: String, password: String): TaskResult<String> {
-        return serverClient.execute(
-            LoginRequest(username, password)
-        )
+    suspend fun login(username: String, password: String) = channelFlow<TaskResult<String>> {
+        send(TaskResult.Loading())
+        withContext(Dispatchers.IO) {
+            delay(2_000)
+            serverClient.execute(
+                LoginRequest(username, password)
+            ).on(
+                success = {
+                    token = it
+                    success(it)
+                },
+                failure = {
+                    failure(it)
+                }
+            )
+        }
     }
 
     val liveUsers: LiveData<List<User>> =

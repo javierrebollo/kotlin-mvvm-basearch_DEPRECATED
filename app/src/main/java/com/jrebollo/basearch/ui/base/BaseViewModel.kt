@@ -1,5 +1,6 @@
 package com.jrebollo.basearch.ui.base
 
+import androidx.annotation.UiThread
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavDirections
@@ -17,20 +18,38 @@ abstract class BaseViewModel : ViewModel() {
     val errorNotifier
         get() = _errorNotifier
 
+    private val _loadingState: SingleLiveEvent<Boolean> = SingleLiveEvent()
+    val loadingState
+        get() = _loadingState
+
+    @UiThread
     fun goTo(direction: NavDirections) {
         _navigation.value = NavigationCommand.To(direction)
     }
 
+    @UiThread
     fun goBack() {
         _navigation.value = NavigationCommand.Back
     }
 
+    @UiThread
     fun goBackTo(directionId: Int) {
         _navigation.value = NavigationCommand.BackTo(directionId)
     }
 
+    @UiThread
     fun notifyError(error: ErrorType) {
-        _errorNotifier.postValue(error)
+        _errorNotifier.value = error
+    }
+
+    @UiThread
+    fun showLoading() {
+        _loadingState.value = true
+    }
+
+    @UiThread
+    fun hideLoading() {
+        _loadingState.value = false
     }
 
     abstract fun loadData()
