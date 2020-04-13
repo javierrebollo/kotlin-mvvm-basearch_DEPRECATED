@@ -3,9 +3,7 @@ package com.jrebollo.data.network
 import com.jrebollo.data.helper.NetworkStatusHelper
 import com.jrebollo.domain.Tracker
 import com.jrebollo.domain.exception.WithoutConnectivityException
-import com.jrebollo.domain.response.ErrorResult
-import com.jrebollo.domain.response.SuccessResult
-import com.jrebollo.domain.response.TaskResult
+import com.jrebollo.domain.response.RepositoryResult
 import okhttp3.*
 import java.util.*
 
@@ -24,12 +22,12 @@ class ServerClient(
     fun <T> execute(
         baseServerRequest: BaseServerRequest<T>,
         extraHeaders: HashMap<String, String>? = null
-    ): TaskResult<T> {
+    ): RepositoryResult<T> {
 
         return try {
-            SuccessResult(executeWithExceptions(baseServerRequest, extraHeaders))
+            RepositoryResult.SuccessResult(executeWithExceptions(baseServerRequest, extraHeaders))
         } catch (exception: Exception) {
-            ErrorResult(exception)
+            RepositoryResult.ErrorResult(exception)
         }
     }
 

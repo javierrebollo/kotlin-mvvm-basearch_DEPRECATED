@@ -2,14 +2,14 @@ package com.jrebollo.basearch.ui.viewmodel
 
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
-import com.jrebollo.basearch.R
+import androidx.lifecycle.viewModelScope
 import com.jrebollo.basearch.ui.base.BaseViewModel
 import com.jrebollo.basearch.ui.base.BaseViewModelFactory
-import com.jrebollo.basearch.ui.base.ErrorType
-import com.jrebollo.basearch.ui.view.LoginViewDirections
-import com.jrebollo.basearch.utils.extensions.getString
-import com.jrebollo.domain.response.on
+import com.jrebollo.domain.response.TaskResult
 import com.jrebollo.domain.usecase.LoginUseCase
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.launch
 
 class LoginVM(
     private val loginUseCase: LoginUseCase
@@ -26,23 +26,50 @@ class LoginVM(
         enableLoginButton.addSource(passwordLiveData) {
             enableLoginButton.value = usernameLiveData.value?.isNotBlank() == true && it?.isNotBlank() ?: false
         }
+        launchDataLoad {
+
+        }
     }
 
     fun login() {
-        loginUseCase(usernameLiveData.value ?: "", passwordLiveData.value ?: "") {
-            it.on(
-                success = { loginSuccess ->
-                    if (loginSuccess) {
-                        goTo(LoginViewDirections.fromLoginToHome())
-                    } else {
-                        notifyError(ErrorType.LoginError(R.string.invalid_username_or_password.getString()))
-                    }
-                },
-                failure = {
-                    notifyError(ErrorType.LoginError(R.string.invalid_username_or_password.getString()))
-                }
-            )
+        viewModelScope.launch {
+            flow<TaskResult<Boolean>> {
+                emit(TaskResult.Loading())
+
+            }.collect { value ->
+
+            }
         }
+
+//        viewModelScope.launch {
+//            loginUseCase(usernameLiveData.value ?: "", passwordLiveData.value ?: "").consumeEach {taskResult->
+//                when(taskResult){
+//                    is TaskResult.Loading -> loading.invoke()
+//                    is TaskResult.SuccessResult -> success(taskResult.value)
+//                    is TaskResult.ErrorResult -> failure(taskResult.exception)
+//                }
+//            }on(
+//                loading = {loginSuccess ->
+//                    if (loginSuccess) {
+//                        goTo(LoginViewDirections.fromLoginToHome())
+//                    } else {
+//                        notifyError(ErrorType.LoginError(R.string.invalid_username_or_password.getString()))
+//                    }
+//                },
+//             success = {},
+//                failure = {}
+//            ) {
+//                it.on(
+//                    success = { loginSuccess ->
+//
+//                    },
+//                    failure = {
+//                        notifyError(ErrorType.LoginError(R.string.invalid_username_or_password.getString()))
+//                    }
+//                )
+//            }
+//        }
+
     }
 }
 

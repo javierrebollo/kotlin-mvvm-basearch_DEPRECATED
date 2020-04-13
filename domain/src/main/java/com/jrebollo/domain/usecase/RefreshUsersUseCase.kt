@@ -2,7 +2,8 @@ package com.jrebollo.domain.usecase
 
 import com.jrebollo.domain.controller.UserRepository
 import com.jrebollo.domain.entity.User
-import com.jrebollo.domain.response.Response
+import com.jrebollo.domain.response.TaskResult
+import kotlinx.coroutines.channels.ReceiveChannel
 import java.util.*
 
 class RefreshUsersUseCase(
@@ -18,10 +19,9 @@ class RefreshUsersUseCase(
         }
     }
 
-    operator fun invoke(response: Response<Boolean>) {
-        execute(
-            sEmptyRequestValues,
-            response
+    operator fun invoke(): ReceiveChannel<TaskResult<Boolean>> {
+        return execute(
+            sEmptyRequestValues
         )
     }
 

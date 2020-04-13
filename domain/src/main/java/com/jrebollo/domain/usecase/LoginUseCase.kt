@@ -2,8 +2,9 @@ package com.jrebollo.domain.usecase
 
 import com.jrebollo.domain.controller.UserRepository
 import com.jrebollo.domain.exception.safeLocalizedMessage
-import com.jrebollo.domain.response.Response
+import com.jrebollo.domain.response.TaskResult
 import com.jrebollo.domain.response.on
+import kotlinx.coroutines.channels.ReceiveChannel
 
 class LoginUseCase(
     private val userRepository: UserRepository
@@ -27,13 +28,12 @@ class LoginUseCase(
         }
     }
 
-    operator fun invoke(userName: String, password: String, response: Response<Boolean>) {
-        execute(
+    operator fun invoke(userName: String, password: String): ReceiveChannel<TaskResult<Boolean>> {
+        return execute(
             RequestValues(
                 userName,
                 password
-            ),
-            response
+            )
         )
     }
 

@@ -11,8 +11,7 @@ import com.jrebollo.domain.controller.UserRepository
 import com.jrebollo.domain.entity.User
 import com.jrebollo.domain.helper.LiveDataHandler
 import com.jrebollo.domain.helper.SharedPreferencesHelper
-import com.jrebollo.domain.response.SuccessResult
-import com.jrebollo.domain.response.TaskResult
+import com.jrebollo.domain.response.RepositoryResult
 
 class UserRepositoryImpl private constructor(
     private val sharedPreferencesHelper: SharedPreferencesHelper,
@@ -27,7 +26,7 @@ class UserRepositoryImpl private constructor(
             sharedPreferencesHelper.token = value
         }
 
-    override fun login(username: String, password: String): TaskResult<String> {
+    override fun login(username: String, password: String): RepositoryResult<String> {
         return serverClient.execute(
             LoginRequest(username, password)
         )
@@ -41,10 +40,10 @@ class UserRepositoryImpl private constructor(
         }
     )
 
-    override suspend fun addUser(user: User): TaskResult<Boolean> {
+    override suspend fun addUser(user: User): RepositoryResult<Boolean> {
         val returned = userDao.insert(UserRoom.from(user))
         Log.d(TAG, "Returned value $returned")
-        return SuccessResult(true)
+        return RepositoryResult.SuccessResult(true)
     }
 
     companion object {

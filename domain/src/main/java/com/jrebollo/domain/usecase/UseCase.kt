@@ -1,14 +1,11 @@
 package com.jrebollo.domain.usecase
 
 import com.jrebollo.domain.Tracker
-import com.jrebollo.domain.response.ErrorResult
-import com.jrebollo.domain.response.Response
-import com.jrebollo.domain.response.SuccessResult
 import com.jrebollo.domain.response.TaskResult
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.ReceiveChannel
-import kotlinx.coroutines.selects.select
+import kotlinx.coroutines.channels.consumeEach
 import kotlin.coroutines.CoroutineContext
 
 abstract class UseCase<V : UseCase.RequestValues, T> : CoroutineScope {
@@ -28,24 +25,27 @@ abstract class UseCase<V : UseCase.RequestValues, T> : CoroutineScope {
 
     protected abstract suspend fun run(requestValues: V)
 
-    protected fun execute(requestValues: V, response: Response<T>) {
-        launch {
-            select<Unit> {
-                receiverChannel.onReceive {
-                    response.invoke(it)
-                }
-            }
-            //ToDo Change select for consumeEach when consumeEach is not experimental
+    protected fun execute(requestValues: V): ReceiveChannel<TaskResult<T>> {
+//        launch {
+//            select<Unit> {
+//                receiverChannel.onReceive {
+//                    response.invoke(it)
+//                }
+//            }
+        //ToDo Change select for consumeEach when consumeEach is not experimental
 //            receiverChannel.consumeEach {
 //                response.invoke(it)
 //            }
 
-        }
+//        }
         launch {
             withContext(backgroundDispatcher) {
+                resultChannel.send(TaskResult.Loading())
                 run(requestValues)
             }
         }
+        return receiverChannel
+
     }
 
     protected fun <T> startAsync(block: suspend () -> T): Deferred<T> = async(supervisorJob) {
@@ -57,11 +57,11 @@ abstract class UseCase<V : UseCase.RequestValues, T> : CoroutineScope {
     }
 
     protected suspend fun sendSuccess(value: T) {
-        resultChannel.send(SuccessResult(value))
+        resultChannel.send(TaskResult.SuccessResult(value))
     }
 
     protected suspend fun sendError(value: Exception) {
-        resultChannel.send(ErrorResult(value))
+        resultChannel.send(TaskResult.ErrorResult(value))
     }
 
     fun clear() {
@@ -70,6 +70,22 @@ abstract class UseCase<V : UseCase.RequestValues, T> : CoroutineScope {
     }
 
     interface RequestValues
+
+
+}
+
+suspend fun <T, R> ReceiveChannel<TaskResult<T>>.on(
+    loading: () -> R,
+    success: (T) -> R,
+    failure: (Exception) -> R
+) {
+    consumeEach { taskResult ->
+        return when (taskResult) {
+            is TaskResult.Loading -> loading.invoke()
+            is TaskResult.SuccessResult -> success(taskResult.value)
+            is TaskResult.ErrorResult -> failure(taskResult.exception)
+        }
+    }
 }
 
 internal val sEmptyRequestValues = object : UseCase.RequestValues {}
