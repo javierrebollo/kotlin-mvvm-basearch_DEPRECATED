@@ -32,6 +32,7 @@ class LoginVM(
     }
 
     fun login() {
+        forceCloseKeyboard()
         viewModelScope.launch {
             userRepository.login(usernameLiveData.value ?: "", passwordLiveData.value ?: "")
                 .on(

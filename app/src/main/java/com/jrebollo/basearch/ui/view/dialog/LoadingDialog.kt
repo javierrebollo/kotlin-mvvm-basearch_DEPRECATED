@@ -9,18 +9,18 @@ import android.widget.ProgressBar
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import com.jrebollo.basearch.R
+import com.jrebollo.basearch.databinding.LoadingDialogBinding
 
 class LoadingDialog : DialogFragment() {
-    private var mPbLoading: ProgressBar? = null
+    private var pbLoading: ProgressBar? = null
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val builder = AlertDialog.Builder(requireActivity(), R.style.Loading)
-        val inflater = requireActivity().layoutInflater
 
-        val view = inflater.inflate(R.layout.loading_dialog, null)
-        builder.setView(view)
-        mPbLoading = view.findViewById(R.id.pbLoading)
+        val binding = LoadingDialogBinding.inflate(requireActivity().layoutInflater)
+        pbLoading = binding.pbLoading
 
+        builder.setView(binding.llRoot)
         return builder.create()
     }
 
@@ -28,6 +28,5 @@ class LoadingDialog : DialogFragment() {
         isCancelable = false
 
         return super.onCreateView(inflater, container, savedInstanceState)
-
     }
 }

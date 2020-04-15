@@ -1,9 +1,11 @@
 package com.jrebollo.basearch.ui.base
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -47,6 +49,15 @@ abstract class BaseView<DB : ViewDataBinding, VM : BaseViewModel, VMF : BaseView
                 loadingDialog.dismiss()
             }
         }
+        viewModel.forceKeyboardState.observe(viewLifecycleOwner) { keyboardState ->
+            keyboardState?.let { safeKeyboardState ->
+                when (safeKeyboardState) {
+                    KeyboardState.SHOW -> openKeyboard()
+                    KeyboardState.HIDE -> closeKeyboard()
+                }
+            }
+        }
+
         return binding.root
     }
 
@@ -68,5 +79,21 @@ abstract class BaseView<DB : ViewDataBinding, VM : BaseViewModel, VMF : BaseView
         })
 
         viewModel.loadData()
+    }
+
+    private fun closeKeyboard() {
+        activity?.let { safeActivity ->
+            val imm: InputMethodManager =
+                safeActivity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0)
+        }
+    }
+
+    private fun openKeyboard() {
+        activity?.let { safeActivity ->
+            val imm: InputMethodManager =
+                safeActivity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, 0)
+        }
     }
 }

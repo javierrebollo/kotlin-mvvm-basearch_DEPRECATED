@@ -22,6 +22,10 @@ abstract class BaseViewModel : ViewModel() {
     val loadingState
         get() = _loadingState
 
+    private val _forceKeyboardState: SingleLiveEvent<KeyboardState> = SingleLiveEvent()
+    val forceKeyboardState
+        get() = _forceKeyboardState
+
     @UiThread
     fun goTo(direction: NavDirections) {
         _navigation.value = NavigationCommand.To(direction)
@@ -52,7 +56,21 @@ abstract class BaseViewModel : ViewModel() {
         _loadingState.value = false
     }
 
+    @UiThread
+    fun forceCloseKeyboard() {
+        _forceKeyboardState.value = KeyboardState.HIDE
+    }
+
+    @UiThread
+    fun forceOpenKeyboard() {
+        _forceKeyboardState.value = KeyboardState.SHOW
+    }
+
     abstract fun loadData()
+}
+
+enum class KeyboardState {
+    HIDE, SHOW
 }
 
 sealed class ErrorType {

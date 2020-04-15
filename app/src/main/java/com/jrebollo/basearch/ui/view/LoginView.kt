@@ -30,7 +30,9 @@ class LoginView : BaseView<ViewLoginBinding, LoginVM, LoginVMFactory>() {
         binding.etPassword.addTextChangedListener {
             viewModel.passwordLiveData.value = it?.toString()
         }
-        binding.btnLogin.setOnClickListener { viewModel.login() }
+        binding.btnLogin.setOnClickListener {
+            viewModel.login()
+        }
     }
 
     override fun initComponents(binding: ViewLoginBinding) {
