@@ -1,7 +1,8 @@
 package com.jrebollo.basearch.exception
 
 enum class ExceptionCode {
-    WRONG_PASSWORD
+    WRONG_PASSWORD,
+    DB_INSERT_FAIL
 }
 
 class MyAppException : Exception {
@@ -12,7 +13,7 @@ class MyAppException : Exception {
         this.code = code
     }
 
-    constructor(code: ExceptionCode, s: String) : super(s) {
+    constructor(code: ExceptionCode, message: String) : super(message) {
         this.code = code
     }
 

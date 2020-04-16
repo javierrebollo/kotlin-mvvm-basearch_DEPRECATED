@@ -21,7 +21,11 @@
         android:id="@+id/homeView"
         android:name="com.jrebollo.basearch.ui.view.HomeView"
         android:label="HomeView"
-        tools:layout="@layout/view_home" />
+        tools:layout="@layout/view_home">
+        <action
+            android:id="@+id/fromHomeToUserDetail"
+            app:destination="@id/userDetailView" />
+    </fragment>
 
     <fragment
         android:id="@+id/loginView"
@@ -31,5 +35,13 @@
         <action
             android:id="@+id/fromLoginToHome"
             app:destination="@id/homeView" />
+    </fragment>
+    <fragment
+        android:id="@+id/userDetailView"
+        android:name="com.jrebollo.basearch.ui.view.UserDetailView"
+        android:label="UserDetailView">
+        <argument
+            android:name="@string/arg_user"
+            app:argType="com.jrebollo.basearch.data.entity.User" />
     </fragment>
 </navigation>

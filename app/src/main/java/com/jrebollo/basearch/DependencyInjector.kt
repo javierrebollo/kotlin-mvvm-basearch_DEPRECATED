@@ -9,6 +9,7 @@ import com.jrebollo.basearch.data.repository.UserRepository
 import com.jrebollo.basearch.ui.viewmodel.HomeVMFactory
 import com.jrebollo.basearch.ui.viewmodel.LoginVMFactory
 import com.jrebollo.basearch.ui.viewmodel.SplashVMFactory
+import com.jrebollo.basearch.ui.viewmodel.UserDetailVMFactory
 import okhttp3.OkHttpClient
 
 object DependencyInjector {
@@ -31,6 +32,10 @@ object DependencyInjector {
     //**********************
     //**** VIEW MODELS *****
     //**********************
+    fun provideUserDetailVMFactory(): UserDetailVMFactory {
+        return UserDetailVMFactory()
+    }
+
     fun provideSplashVMFactory(): SplashVMFactory {
         return SplashVMFactory(
             provideUserRepository()

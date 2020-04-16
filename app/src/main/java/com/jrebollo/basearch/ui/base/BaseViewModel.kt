@@ -74,6 +74,7 @@ enum class KeyboardState {
 }
 
 sealed class ErrorType {
+    data class GenericError(val message: String) : ErrorType()
     data class LoginError(val message: String) : ErrorType()
     data class LoadLiveUserError(val message: String) : ErrorType()
 }
